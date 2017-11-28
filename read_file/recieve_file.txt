@@ -1,0 +1,15 @@
+import pika 
+
+def callback(ch, method, properties, body):
+		print("  [x] Recieved %r" %body)
+def read_lines_from_rabbit():
+	con = connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+	channel = con.channel()
+
+	channel.basic_consume(callback,
+                      queue='ReadLines')
+					  
+if __name__ == "__main__":
+	lines = read_file("loreum.txt")
+	send_lines_to_rabbit(lines)
+	
